@@ -1,15 +1,15 @@
-#Author: omynayak, 2025
-#Desktop sorter program
-#Purpose: To look through the files on the desktop and sort them into the respective folders on the desktop
-#Why: Because lazy to clean up my desktop
+# Author: omynayak, 2025
+# Desktop Sorter Program 2.0
+# Purpose: To automatically sort files on the desktop into structured folders based on type
+# Why: Because I don’t want to manually clean my desktop every week
 
+from pathlib import Path  # Helps navigate and manage file paths in an OS-independent way
+import shutil  # Gives me shell operations like moving files
+import re  # Helps in pattern splitting to break filenames intelligently
 
-from pathlib import Path #imports the pathlib module that helps navigate around the desktop
-import shutil #shell utilities helps move things around like the files I want to move around in this program
-
-#A dictionary containing all the formats as lists and mapping them to their respective file paths relative to the desktop
+# A dictionary mapping categories to lists of extensions, determining where each file goes
 formats = {
-    "Media/Images":['.jpeg','.png','.jpg'],
+    "Media/Images": ['.jpeg', '.png', '.jpg'],
     "Media/Video": ['.mpg', '.mp4'],
     "Media/Audio": ['.mp3', '.wav'],
     "Documents/Excel": ['.xlsx'],
@@ -17,29 +17,43 @@ formats = {
     "Documents/Word": ['.docx'],
 }
 
+# Get the path to the my Desktop 
+desktop = Path.home() / "OneDrive" / "Desktop"
 
-desktop = Path.home()/"OneDrive"/"Desktop" #set the path to the desktop 
+# Iterate over every item in the desktop folder
+for file in desktop.iterdir():
+    if file.is_file():  # Only care about actual files (not folders)
+        ext = file.suffix.lower()  # Get the file extension, lowercase to handle cases like .JPG
 
-for file in desktop.iterdir(): #.iterdir iterates through all the entities in the desktop whether files, folders or whatever else
-    if file.is_file(): #if the selected entity is a file
-        moved=False #set the moved flag to false. This helps us find any miscellaneous files and put them into Misc
-        ext = file.suffix.lower() #sets ext to the lower case version of the file extension
-        for folder, extension in formats.items(): #iterating through the formats dictionary
-            for ex in extension: #for each element in the lists
-                if ex == ext: #if the current file extension matches the element in the list
-                    dest_path = desktop / folder #add the key of the list to the desktop file path
-                    dest_path.mkdir(parents=True, exist_ok=True) #creates the required file if it doesn't exist
-                    shutil.move(file, dest_path / file.name) #moves the selected file to the final path
-                    moved = True #set the moved flag to true so it doesnt try to move this file to Misc folder
-                    break #break out of the loop
-        if not moved: #if the file selected has not been moved, ie; the file extension is not in the dictionary
-            dest_path = desktop / "Misc" #adds the Misc folder to the final path 
-            print(f"Moving {file.name} to {dest_path}") #Just a print statement I'd put in to debug
-            dest_path.mkdir(parents=True, exist_ok=True) #makes directory if it doesnt exist
-            shutil.move(file, dest_path / file.name) #moves the file into the Misc folder
+        # Break the filename (excluding the extension) into components using _ and . as delimiters
+        extraPath = re.split(r'[_.]', file.name)
 
-#I do realise that something like: 
-#extension_map = {ext: folder for folder, extensions in formats.items() for ext in extensions}
-#Could've made things look a lot cleaner, but I am used to the C/C++ style of deconstructed programming
-#It also helps me train my python muscles before I bite into shorthand
+        # Loop through our predefined format categories
+        for folder, extension in formats.items():
+            for ex in extension:
+                if ex == ext:  # If we find a match
+                    dest_path = desktop / folder  # Start the destination path with the base folder
 
+                    # Build nested folders using the components of the filename (ingoring the first which is name and last which is format)
+                    for element in extraPath[1:-1]:
+                        if element:  # Avoid empty strings
+                            dest_path = dest_path / element
+
+                    dest_path.mkdir(parents=True, exist_ok=True)  # Create the destination directory if needed
+                    shutil.move(file, dest_path / file.name)  # Move the file to the appropriate location
+                    break  # Stop checking once matched
+
+        # Unlike previous versions, we don't move unmatched files into a "Misc" folder.
+        # Why? Because it's better to leave unknown or system files where they are rather than lumping them together
+        # This avoids clutter and potential errors from moving system or config files
+
+# AUTO-START INTEGRATION:
+# This script is meant to run automatically on system startup via a .bat file.
+# The .bat file should look like this:
+#
+#   @echo off
+#   "C:\Users\ASUS\AppData\Local\Programs\Python\Python313\pythonw.exe" "C:\Users\ASUS\OneDrive\Desktop\Dev Stuff\Python\desktop_sort2.py"
+#
+# By using `pythonw.exe`, we ensure the script runs silently in the background (no terminal pop-up).
+# Placing this .bat file in the system startup folder (`shell:startup`) makes sure it runs every time you log in.
+# This gives you a constantly tidy desktop with no manual effort.
