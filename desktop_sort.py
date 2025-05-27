@@ -38,9 +38,15 @@ for file in desktop.iterdir():
                     for element in extraPath[1:-1]:
                         if element:  # Avoid empty strings
                             dest_path = dest_path / element
-
+                    counter = 1
+                    new_name = file.name
+                    while(dest_path / new_name).exists():
+                        stem = file.stem
+                        suffix = file.suffix
+                        new_name = f"{stem}({counter}){suffix}"
+                        counter += 1
                     dest_path.mkdir(parents=True, exist_ok=True)  # Create the destination directory if needed
-                    shutil.move(file, dest_path / file.name)  # Move the file to the appropriate location
+                    shutil.move(file, dest_path / new_name)  # Move the file to the appropriate location
                     break  # Stop checking once matched
 
         # Unlike previous versions, we don't move unmatched files into a "Misc" folder.
