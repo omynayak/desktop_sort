@@ -38,15 +38,23 @@ for file in desktop.iterdir():
                     for element in extraPath[1:-1]:
                         if element:  # Avoid empty strings
                             dest_path = dest_path / element
+
+                    #I noticed that if a file with the same name already exists in the destination it just gets overwritten 
+                    #This bit of code helps protect from that
                     counter = 1
                     new_name = file.name
-                    while(dest_path / new_name).exists():
-                        stem = file.stem
+                    while(dest_path / new_name).exists(): #as long as there is a file in the destination with the same filename
+                        #split the name into file name and suffix
+                        stem = file.stem    
                         suffix = file.suffix
+
+                        #attach the counter value to the filename and put it back together
                         new_name = f"{stem}({counter}){suffix}"
-                        counter += 1
+                        counter += 1 #increment counter 
+
+
                     dest_path.mkdir(parents=True, exist_ok=True)  # Create the destination directory if needed
-                    shutil.move(file, dest_path / new_name)  # Move the file to the appropriate location
+                    shutil.move(file, dest_path / new_name)  # Move the file (new name) to the appropriate location
                     break  # Stop checking once matched
 
         # Unlike previous versions, we don't move unmatched files into a "Misc" folder.
