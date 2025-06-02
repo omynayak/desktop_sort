@@ -68,6 +68,5 @@ for file in desktop.iterdir():
 #   @echo off
 #   "C:\Users\ASUS\AppData\Local\Programs\Python\Python313\pythonw.exe" "C:\Users\ASUS\OneDrive\Desktop\Dev Stuff\Python\desktop_sort2.py"
 #
-# By using `pythonw.exe`, we ensure the script runs silently in the background (no terminal pop-up).
 # Placing this .bat file in the system startup folder (`shell:startup`) makes sure it runs every time you log in.
 # This gives you a constantly tidy desktop with no manual effort.
