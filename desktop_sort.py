@@ -42,15 +42,15 @@ for file in desktop.iterdir():
 
                     #I noticed that if a file with the same name already exists in the destination it just gets overwritten 
                     #This bit of code helps protect from that
+                    suffix = file.suffix
                     counter = 1
-                    new_name = file.name
+                    new_name = f"{extraPath[0]}{suffix}"
                     while(dest_path / new_name).exists(): #as long as there is a file in the destination with the same filename
                         #split the name into file name and suffix
-                        stem = file.stem    
-                        suffix = file.suffix
+                        stem = file.stem   
 
                         #attach the counter value to the filename and put it back together
-                        new_name = f"{stem}({counter}){suffix}"
+                        new_name = f"{extraPath[0]}({counter}){suffix}"
                         counter += 1 #increment counter 
 
 
