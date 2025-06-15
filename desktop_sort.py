@@ -15,6 +15,7 @@ formats = {
     "Documents/Excel": ['.xlsx'],
     "Documents/PDF": ['.pdf'],
     "Documents/Word": ['.docx'],
+    "Documents/Stray_Code":['.py','.cpp','.c','.html','.css']
 }
 
 # Get the path to the my Desktop 
