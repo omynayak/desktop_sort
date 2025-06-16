@@ -46,10 +46,8 @@ for file in desktop.iterdir():
                     counter = 1
                     new_name = f"{extraPath[0]}{suffix}"
                     while(dest_path / new_name).exists(): #as long as there is a file in the destination with the same filename
-                        #split the name into file name and suffix
-                        stem = file.stem   
-
                         #attach the counter value to the filename and put it back together
+                        #here we only use the 0th element of file path because I dont want the file path remaining in the name
                         new_name = f"{extraPath[0]}({counter}){suffix}"
                         counter += 1 #increment counter 
 
