@@ -38,7 +38,7 @@ Automatically declutters your desktop using filename semantics and file extensio
 3. **Duplicate Handling**:  
    If a file with the same name exists, it appends a counter:
    ```
-   report.pdf -? report(1).pdf -> report(2).pdf ...
+   report.pdf -> report(1).pdf -> report(2).pdf ...
    ```
 
 ---
