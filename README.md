@@ -38,7 +38,7 @@ Automatically declutters your desktop using filename semantics and file extensio
 3. **Duplicate Handling**:  
    If a file with the same name exists, it appends a counter:
    ```
-   report.pdf → report(1).pdf → report(2).pdf ...
+   report.pdf -? report(1).pdf -> report(2).pdf ...
    ```
 
 ---
@@ -57,7 +57,11 @@ Automatically declutters your desktop using filename semantics and file extensio
    ```bash
    python desktop_sort.py
    ```
-3. Your desktop gets neatly sorted.
+   Or on Linux:
+   ```bash
+   python3 desktop_sort.py
+   ```
+4. Your desktop gets neatly sorted.
 
 ---
 
@@ -87,10 +91,6 @@ You can automate this script to run every time you log in:
    "C:\Path\To\pythonw.exe" "C:\Path\To\desktop_sort.py"
    ```
 
-2. Place it in the Startup folder (`Win + R` → `shell:startup`)
+2. Place it in the Startup folder (`Win + R` -> `shell:startup`)
 
----
 
-## Author
-
-Manel Om Nayak – https://github.com/omynayak
